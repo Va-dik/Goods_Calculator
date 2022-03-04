@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:goods_calculator/localization/locale_ru.dart';
 
@@ -11,16 +9,18 @@ class GramsToMoney extends StatefulWidget {
 }
 
 class _GramsToMoneyState extends State<GramsToMoney> {
-  List<TextEditingController> _controller = [
-    for (int i = 0; i < 3; i++) TextEditingController()
-  ];
+  static TextEditingController money = TextEditingController();
+  static TextEditingController goodsGrams = TextEditingController();
+  static TextEditingController goodsPrice = TextEditingController();
 
-  double money = 0;
+  bool readOnly = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 560),
+        height: 400,
+        width: 300,
+        margin: const EdgeInsets.only(left: 10, right: 10),
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.black,
@@ -30,61 +30,113 @@ class _GramsToMoneyState extends State<GramsToMoney> {
           color: Colors.blue[200],
         ),
         child: Stack(children: [
-          money == 0
-              ? Text(
-                  mapa.keys.first,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+          money != 0
+              ? Align(
+                  alignment: const Alignment(-1, -0.95),
+                  child: Text(
+                    mapa.keys.first,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 )
-              : Text(mapa.values.first),
-          Align(
-            alignment: const Alignment(-1, 1),
-            child: SizedBox(
-              height: 50,
-              width: 50,
-              child: TextField(
-                controller: _controller[0],
-              ),
-            ),
-          ),
-          Align(
-            alignment: const Alignment(-0.4, -1),
-            child: SizedBox(
-              height: 50,
-              width: 60,
-              child: TextField(
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 10), //Change this value to custom as you like
-                  isDense: true,
-                  fillColor: Colors.white,
-                  filled: true,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.red, width: 2),
-                  ),
-                  // and add this line
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.cyan, width: 2),
-                  ),
+              : Align(
+                  alignment: const Alignment(-1, -0.95),
+                  child: Text(mapa.values.first,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
-                controller: _controller[1],
-              ),
+          Align(
+            alignment: const Alignment(-1, -0.55),
+            child: Text(
+              mapa.keys.elementAt(2),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           Align(
-            alignment: const Alignment(1, 1),
+              alignment: const Alignment(-1, -0.75),
+              child: Text(mapa.keys.elementAt(1),
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold))),
+          Align(
+            alignment: const Alignment(0.62, -0.945),
             child: SizedBox(
-              height: 50,
-              width: 50,
-              child: TextField(
-                controller: _controller[2],
-              ),
-            ),
+                height: 50,
+                width: 50,
+                child: Widgets.textField(goodsPrice, readOnly)),
+          ),
+          Align(
+            alignment: const Alignment(0.02, -0.735),
+            child: SizedBox(
+                height: 50,
+                width: 50,
+                child: Widgets.textField(goodsGrams, readOnly)),
+          ),
+          Align(
+            alignment: const Alignment(-0.5, -0.525),
+            child: SizedBox(
+                height: 50,
+                width: 50,
+                child: Widgets.textField(money, readOnly)),
           ),
         ]));
+  }
+
+  void _result() {
+    setState(() {
+      if (goodsGrams.text.isNotEmpty && goodsPrice.text.isNotEmpty) {
+        money.text = (double.parse(goodsPrice.value.text) *
+                double.parse(goodsGrams.value.text) /
+                1000)
+            .toString();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    goodsGrams.addListener(_result);
+    goodsPrice.addListener(_result);
+  }
+
+  @override
+  void dispose() {
+    goodsGrams.dispose();
+    goodsPrice.dispose();
+    super.dispose();
+  }
+}
+
+class Widgets {
+  static Widget textField(TextEditingController controller, bool valid) {
+    return TextField(
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: 10), //Change this value to custom as you like
+        isDense: true,
+        fillColor: Colors.white,
+        filled: true,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        ),
+        // and add this line
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Colors.cyan, width: 2),
+        ),
+      ),
+      readOnly: valid,
+      controller: controller,
+      onTap: () {
+        
+        if (_GramsToMoneyState.money.text.isNotEmpty && _GramsToMoneyState.goodsPrice.text.isNotEmpty && _GramsToMoneyState.goodsGrams.text.isNotEmpty) {
+          _GramsToMoneyState.goodsPrice.clear();
+          _GramsToMoneyState.goodsGrams.clear();
+        }
+      },
+    );
   }
 }
