@@ -1,7 +1,5 @@
 Map<String, String> mapa = {
-  "Цена товара за килограмм:": "Product price per kilogram:",
-  "Сколько взяли грамм:": "How many grams taken:",
-  "Вы оплатите:": "You will pay",
+  "Цена за 1 кг": "Price per 1 kg",
+  "Вес (грамм)": "Weight (grams)",
+  "Стоимость": "Cost",
 };
-
-List<String> locale = ["грамм, gram"];
