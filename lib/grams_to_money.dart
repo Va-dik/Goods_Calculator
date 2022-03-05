@@ -13,7 +13,12 @@ class _GramsToMoneyState extends State<GramsToMoney> {
   static TextEditingController goodsGrams = TextEditingController();
   static TextEditingController goodsPrice = TextEditingController();
 
+  int iconsIndex = 0;
   bool readOnly = false;
+  static bool priceLockChecker = false;
+  static bool gramsLockChecker = false;
+  static bool moneyLockChecker = false;
+  Icon lockIcon = Icon(Icons.lock_open);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +83,38 @@ class _GramsToMoneyState extends State<GramsToMoney> {
                 width: 50,
                 child: Widgets.textField(money, readOnly)),
           ),
+          Align(
+              alignment: const Alignment(-0.01, -0.58),
+              child: IconButton(
+                  splashColor: Colors.red,
+                  onPressed: () {
+                    lockState();
+                    setState(() {
+                      if (iconsIndex == 0) {
+                        moneyLockChecker = false;
+                      }
+                      if (iconsIndex == 1) {
+                        moneyLockChecker = true;
+                      }
+                      print(moneyLockChecker);
+                    });
+                  },
+                  icon: lockIcon)),
         ]));
+  }
+
+  void lockState() {
+    setState(() {
+      iconsIndex++;
+      if (iconsIndex > 1) {
+        iconsIndex = 0;
+      }
+      if (iconsIndex == 0) {
+        lockIcon = Icon(Icons.lock_open);
+      } else if (iconsIndex == 1) {
+        lockIcon = Icon(Icons.lock_outline);
+      }
+    });
   }
 
   void _result() {
@@ -131,10 +167,13 @@ class Widgets {
       readOnly: valid,
       controller: controller,
       onTap: () {
-        
-        if (_GramsToMoneyState.money.text.isNotEmpty && _GramsToMoneyState.goodsPrice.text.isNotEmpty && _GramsToMoneyState.goodsGrams.text.isNotEmpty) {
+        if (_GramsToMoneyState.money.text.isNotEmpty &&
+            _GramsToMoneyState.goodsPrice.text.isNotEmpty &&
+            _GramsToMoneyState.goodsGrams.text.isNotEmpty &&
+            _GramsToMoneyState.moneyLockChecker == false) {
           _GramsToMoneyState.goodsPrice.clear();
           _GramsToMoneyState.goodsGrams.clear();
+          _GramsToMoneyState.money.clear();
         }
       },
     );
