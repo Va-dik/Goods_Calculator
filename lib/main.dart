@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
           backgroundColor: Colors.amber,
           title: Text("Goods Calculator",
-              style: GoogleFonts.roboto(textStyle: TextStyle(
+              style: GoogleFonts.roboto(textStyle: const TextStyle(
                   fontSize: 23,
                   color: Colors.blue,
                   fontWeight: FontWeight.bold))),
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.blue,
                     size: 30,
                   ))),
-                  body: GramsToMoney(),
+                  body: const GramsToMoney(),
     );
   }
 }
