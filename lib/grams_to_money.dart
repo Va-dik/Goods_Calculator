@@ -9,9 +9,9 @@ class GramsToMoney extends StatefulWidget {
 }
 
 class _GramsToMoneyState extends State<GramsToMoney> {
-  static TextEditingController money = TextEditingController();
-  static TextEditingController goodsGrams = TextEditingController();
-  static TextEditingController goodsPrice = TextEditingController();
+  TextEditingController money = TextEditingController();
+  TextEditingController goodsGrams = TextEditingController();
+  TextEditingController goodsPrice = TextEditingController();
 
   bool readOnly = false;
   static bool priceLockChecker = false,
@@ -143,53 +143,53 @@ class _GramsToMoneyState extends State<GramsToMoney> {
     goodsPrice.dispose();
     super.dispose();
   }
-}
 
-Widget textField(TextEditingController controller, bool readOnly) {
-  return TextField(
-    keyboardType: TextInputType.number,
-    textAlign: TextAlign.center,
-    decoration: const InputDecoration(
-      contentPadding: EdgeInsets.symmetric(
-          vertical: 10), //Change this value to custom as you like
-      isDense: true,
-      fillColor: Colors.white,
-      filled: true,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Colors.red, width: 2),
+  Widget textField(TextEditingController controller, bool readOnly) {
+    return TextField(
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: 10), //Change this value to custom as you like
+        isDense: true,
+        fillColor: Colors.white,
+        filled: true,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        ),
+        // and add this line
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(color: Colors.cyan, width: 2),
+        ),
       ),
-      // and add this line
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Colors.cyan, width: 2),
-      ),
-    ),
-    readOnly: readOnly,
-    controller: controller,
-    onTap: () {
-      if (controller.text.isNotEmpty &&
-          _GramsToMoneyState.priceLockChecker == true &&
-          _GramsToMoneyState.gramsLockChecker == false) {
-        _GramsToMoneyState.goodsGrams.clear();
-        _GramsToMoneyState.money.clear();
-      } else if (controller.text.isNotEmpty &&
-          _GramsToMoneyState.gramsLockChecker == true &&
-          _GramsToMoneyState.priceLockChecker == false) {
-        _GramsToMoneyState.goodsPrice.clear();
-        _GramsToMoneyState.money.clear();
-      } else if (controller.text.isNotEmpty &&
-          _GramsToMoneyState.moneyLockChecker == true) {
-        _GramsToMoneyState.goodsPrice.clear();
-        _GramsToMoneyState.goodsGrams.clear();
-      } else if (controller.text.isNotEmpty &&
-          _GramsToMoneyState.priceLockChecker == false &&
-          _GramsToMoneyState.gramsLockChecker == false &&
-          _GramsToMoneyState.moneyLockChecker == false) {
-        _GramsToMoneyState.goodsPrice.clear();
-        _GramsToMoneyState.goodsGrams.clear();
-        _GramsToMoneyState.money.clear();
-      }
-    },
-  );
+      readOnly: readOnly,
+      controller: controller,
+      onTap: () {
+        if (controller.text.isNotEmpty &&
+            _GramsToMoneyState.priceLockChecker == true &&
+            _GramsToMoneyState.gramsLockChecker == false) {
+          goodsGrams.clear();
+          money.clear();
+        } else if (controller.text.isNotEmpty &&
+            _GramsToMoneyState.gramsLockChecker == true &&
+            _GramsToMoneyState.priceLockChecker == false) {
+          goodsPrice.clear();
+          money.clear();
+        } else if (controller.text.isNotEmpty &&
+            _GramsToMoneyState.moneyLockChecker == true) {
+          goodsPrice.clear();
+          goodsGrams.clear();
+        } else if (controller.text.isNotEmpty &&
+            _GramsToMoneyState.priceLockChecker == false &&
+            _GramsToMoneyState.gramsLockChecker == false &&
+            _GramsToMoneyState.moneyLockChecker == false) {
+          goodsPrice.clear();
+          goodsGrams.clear();
+          money.clear();
+        }
+      },
+    );
+  }
 }
