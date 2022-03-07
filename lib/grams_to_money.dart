@@ -84,7 +84,7 @@ class _GramsToMoneyState extends State<GramsToMoney> {
       Align(
           alignment: const Alignment(0.9, -0.945),
           child: IconButton(
-              splashColor: Colors.red,
+              splashRadius: 0.1,
               onPressed: () {
                 setState(() {
                   priceLockChecker = !priceLockChecker;
@@ -96,7 +96,7 @@ class _GramsToMoneyState extends State<GramsToMoney> {
       Align(
           alignment: const Alignment(0.3, -0.735),
           child: IconButton(
-              splashColor: Colors.red,
+              splashRadius: 0.1,
               onPressed: () {
                 setState(() {
                   gramsLockChecker = !gramsLockChecker;
@@ -108,7 +108,7 @@ class _GramsToMoneyState extends State<GramsToMoney> {
       Align(
           alignment: const Alignment(-0.01, -0.58),
           child: IconButton(
-              splashColor: Colors.red,
+              splashRadius: 0.1,
               onPressed: () {
                 setState(() {
                   moneyLockChecker = !moneyLockChecker;

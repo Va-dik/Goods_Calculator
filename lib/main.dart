@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goods_calculator/first_page.dart';
 import 'package:goods_calculator/grams_to_money.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -9,7 +10,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(title: "Goods Calculator",
+    return const MaterialApp(
+      title: "Goods Calculator",
       home: HomePage(),
     );
   }
@@ -26,21 +28,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.amber,
-          title: Text("Goods Calculator",
-              style: GoogleFonts.roboto(textStyle: const TextStyle(
-                  fontSize: 23,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold))),
-          centerTitle: true,
-          leading: Builder(
-              builder: (context) => const Icon(
-                    Icons.calculate,
-                    color: Colors.blue,
-                    size: 30,
-                  ))),
-                  body: const GramsToMoney(),
+      body: FirstPage(),
     );
   }
 }
