@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goods_calculator/localization/locale.dart';
+import "dart:math";
 
 class GramsToMoney extends StatefulWidget {
   const GramsToMoney({Key? key}) : super(key: key);
@@ -30,93 +31,85 @@ class _GramsToMoneyState extends State<GramsToMoney> {
         ? Icon(Icons.lock_outline, color: Colors.orange[900])
         : const Icon(Icons.lock_open);
 
-    return Stack(children: [
-      money.text != "-1" //Localization
-          //Text
-          ? Align(
-              alignment: const Alignment(-1, -0.95),
-              child: Text(
-                mapa.keys.first,
+    return Container(
+      color: Colors.amber,
+      margin: EdgeInsets.only(left: 20, right: 20, bottom: 450),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //Price column
+        Column(
+          children: [
+            //Lock price
+            IconButton(
+                splashRadius: 0.1,
+                onPressed: () {
+                  setState(() {
+                    priceLockChecker = !priceLockChecker;
+                  });
+                },
+                icon: priceLockIcon),
+            //TextField goods price
+            SizedBox(
+                height: 100,
+                width: 100,
+                child: textField(goodsPrice, readOnly)),
+            Text(mapa.keys.elementAt(0),
                 style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            )
-          //Text
-          : Align(
-              alignment: const Alignment(-1, -0.95),
-              child: Text(mapa.values.first,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
-            ),
-      //Text
-      Align(
-          alignment: const Alignment(-1, -0.75),
-          child: Text(mapa.keys.elementAt(1),
-              style:
-                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
-      //Text
-      Align(
-        alignment: const Alignment(-1, -0.55),
-        child: Text(
-          mapa.keys.elementAt(2),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          ],
         ),
-      ),
-      //TextField goods price
-      Align(
-        alignment: const Alignment(0.62, -0.945),
-        child: SizedBox(
-            height: 50, width: 50, child: textField(goodsPrice, readOnly)),
-      ),
-      //TextField goods grams
-      Align(
-        alignment: const Alignment(0.02, -0.735),
-        child: SizedBox(
-            height: 50, width: 50, child: textField(goodsGrams, readOnly)),
-      ),
-      //TextField money
-      Align(
-        alignment: const Alignment(-0.5, -0.525),
-        child:
-            SizedBox(height: 50, width: 50, child: textField(money, readOnly)),
-      ),
-      //Lock price
-      Align(
-          alignment: const Alignment(0.9, -0.945),
-          child: IconButton(
-              splashRadius: 0.1,
-              onPressed: () {
-                setState(() {
-                  priceLockChecker = !priceLockChecker;
-                  print(priceLockChecker);
-                });
-              },
-              icon: priceLockIcon)),
-      //Lock grams
-      Align(
-          alignment: const Alignment(0.3, -0.735),
-          child: IconButton(
+
+        Container(
+            margin: EdgeInsets.only(right: 2),
+            color: Colors.black,
+            height: 70,
+            width: 2),
+        //Grams column
+        Column(children: [
+          //Lock grams
+          IconButton(
               splashRadius: 0.1,
               onPressed: () {
                 setState(() {
                   gramsLockChecker = !gramsLockChecker;
-                  print(gramsLockChecker);
                 });
               },
-              icon: gramsLockIcon)),
-      //Lock money
-      Align(
-          alignment: const Alignment(-0.01, -0.58),
-          child: IconButton(
-              splashRadius: 0.1,
-              onPressed: () {
-                setState(() {
-                  moneyLockChecker = !moneyLockChecker;
-                  print(moneyLockChecker);
-                });
-              },
-              icon: moneyLockIcon)),
-    ]);
+              icon: gramsLockIcon),
+          //TextField goods grams
+          SizedBox(
+              height: 100, width: 100, child: textField(goodsGrams, readOnly)),
+          Text(mapa.keys.elementAt(1),
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        ]),
+
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: 2),
+            color: Colors.black,
+            height: 70,
+            width: 2),
+        //Money column
+        Column(
+          children: [
+            //Lock money
+            IconButton(
+                splashRadius: 0.1,
+                onPressed: () {
+                  setState(() {
+                    moneyLockChecker = !moneyLockChecker;
+                  });
+                },
+                icon: moneyLockIcon),
+            //TextField money
+            SizedBox(
+                height: 100, width: 100, child: textField(money, readOnly)),
+            Text(
+              mapa.keys.elementAt(2),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ]),
+    );
   }
 
   void _result() {
@@ -125,7 +118,7 @@ class _GramsToMoneyState extends State<GramsToMoney> {
         money.text = (double.parse(goodsPrice.value.text) *
                 double.parse(goodsGrams.value.text) /
                 1000)
-            .toString();
+            .toStringAsFixed(2);
       }
     });
   }
@@ -149,14 +142,12 @@ class _GramsToMoneyState extends State<GramsToMoney> {
       keyboardType: TextInputType.number,
       textAlign: TextAlign.center,
       decoration: const InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            vertical: 10), //Change this value to custom as you like
-        isDense: true,
+        contentPadding: EdgeInsets.symmetric(vertical: 30),
         fillColor: Colors.white,
-        filled: true,
+        filled: false,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.red, width: 2),
+          borderSide: BorderSide(color: Colors.white, width: 2),
         ),
         // and add this line
         focusedBorder: OutlineInputBorder(
