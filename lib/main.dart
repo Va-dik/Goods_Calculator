@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goods_calculator/first_page.dart';
-import 'package:goods_calculator/grams_to_money.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() => runApp(const MyApp());
@@ -28,6 +27,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
       body: FirstPage(),
     );
   }

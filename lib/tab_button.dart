@@ -15,15 +15,15 @@ class TabButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          padding: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
           child: Text(
             "$text",
             style: GoogleFonts.robotoSlab(
               textStyle: TextStyle(
-                fontSize: 15,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
                   color:
-                      selectedPage == pageNumber ? Colors.blue : Colors.black),
+                      selectedPage == pageNumber ? Colors.black : Colors.grey),
             ),
           )),
     );

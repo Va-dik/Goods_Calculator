@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goods_calculator/localization/locale.dart';
-import "dart:math";
 
 class GramsToMoney extends StatefulWidget {
   const GramsToMoney({Key? key}) : super(key: key);
@@ -10,9 +9,12 @@ class GramsToMoney extends StatefulWidget {
 }
 
 class _GramsToMoneyState extends State<GramsToMoney> {
-  TextEditingController money = TextEditingController();
-  TextEditingController goodsGrams = TextEditingController();
-  TextEditingController goodsPrice = TextEditingController();
+  final TextEditingController _priceController =
+      TextEditingController(text: '0');
+  final TextEditingController _gramsController =
+      TextEditingController(text: '0');
+  final TextEditingController _moneyController =
+      TextEditingController(text: '0');
 
   bool readOnly = false;
   static bool priceLockChecker = false,
@@ -23,88 +25,105 @@ class _GramsToMoneyState extends State<GramsToMoney> {
   Widget build(BuildContext context) {
     Icon priceLockIcon = priceLockChecker
         ? Icon(Icons.lock_outline, color: Colors.orange[900])
-        : const Icon(Icons.lock_open);
+        : Icon(Icons.lock_open, color: Colors.grey[400]);
     Icon gramsLockIcon = gramsLockChecker
         ? Icon(Icons.lock_outline, color: Colors.orange[900])
-        : const Icon(Icons.lock_open);
+        : const Icon(Icons.lock_open, color: Colors.grey);
     Icon moneyLockIcon = moneyLockChecker
         ? Icon(Icons.lock_outline, color: Colors.orange[900])
-        : const Icon(Icons.lock_open);
+        : const Icon(Icons.lock_open, color: Colors.grey);
 
     return Container(
-      color: Colors.amber,
-      margin: EdgeInsets.only(left: 20, right: 20, bottom: 450),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         //Price column
         Column(
           children: [
             //Lock price
             IconButton(
-                splashRadius: 0.1,
-                onPressed: () {
-                  setState(() {
-                    priceLockChecker = !priceLockChecker;
-                  });
-                },
-                icon: priceLockIcon),
+              alignment: Alignment(-0.5, 1),
+              splashRadius: 0.1,
+              onPressed: () {
+                setState(() {
+                  priceLockChecker = !priceLockChecker;
+                });
+              },
+              icon: priceLockIcon,
+              iconSize: 20,
+            ),
             //TextField goods price
             SizedBox(
                 height: 100,
-                width: 100,
-                child: textField(goodsPrice, readOnly)),
+                width: 125,
+                child: textField(_priceController, readOnly)),
             Text(mapa.keys.elementAt(0),
                 style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ],
         ),
 
-        Container(
-            margin: EdgeInsets.only(right: 2),
-            color: Colors.black,
-            height: 70,
-            width: 2),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+              margin: const EdgeInsets.only(left: 3, bottom: 10),
+              color: Colors.grey[400],
+              height: 200,
+              width: 1.5),
+        ),
         //Grams column
         Column(children: [
           //Lock grams
           IconButton(
-              splashRadius: 0.1,
-              onPressed: () {
-                setState(() {
-                  gramsLockChecker = !gramsLockChecker;
-                });
-              },
-              icon: gramsLockIcon),
+            alignment: Alignment(-0.5, 1),
+            splashRadius: 0.1,
+            onPressed: () {
+              setState(() {
+                gramsLockChecker = !gramsLockChecker;
+              });
+            },
+            icon: gramsLockIcon,
+            iconSize: 20,
+          ),
           //TextField goods grams
           SizedBox(
-              height: 100, width: 100, child: textField(goodsGrams, readOnly)),
+              height: 100,
+              width: 125,
+              child: textField(_gramsController, readOnly)),
           Text(mapa.keys.elementAt(1),
               style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ]),
 
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: 2),
-            color: Colors.black,
-            height: 70,
-            width: 2),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+              margin: const EdgeInsets.only(left: 2, right: 2, bottom: 10),
+              color: Colors.grey[400],
+              height: 200,
+              width: 1.5),
+        ),
         //Money column
         Column(
           children: [
             //Lock money
             IconButton(
-                splashRadius: 0.1,
-                onPressed: () {
-                  setState(() {
-                    moneyLockChecker = !moneyLockChecker;
-                  });
-                },
-                icon: moneyLockIcon),
+              alignment: Alignment(-0.5, 1),
+              splashRadius: 0.1,
+              onPressed: () {
+                setState(() {
+                  moneyLockChecker = !moneyLockChecker;
+                });
+              },
+              icon: moneyLockIcon,
+              iconSize: 20,
+            ),
             //TextField money
             SizedBox(
-                height: 100, width: 100, child: textField(money, readOnly)),
+                height: 100,
+                width: 125,
+                child: textField(_moneyController, readOnly)),
             Text(
               mapa.keys.elementAt(2),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -114,9 +133,10 @@ class _GramsToMoneyState extends State<GramsToMoney> {
 
   void _result() {
     setState(() {
-      if (goodsGrams.text.isNotEmpty && goodsPrice.text.isNotEmpty) {
-        money.text = (double.parse(goodsPrice.value.text) *
-                double.parse(goodsGrams.value.text) /
+      if (_gramsController.text.isNotEmpty &&
+          _priceController.text.isNotEmpty) {
+        _moneyController.text = (double.parse(_priceController.value.text) *
+                double.parse(_gramsController.value.text) /
                 1000)
             .toStringAsFixed(2);
       }
@@ -126,59 +146,51 @@ class _GramsToMoneyState extends State<GramsToMoney> {
   @override
   void initState() {
     super.initState();
-    goodsGrams.addListener(_result);
-    goodsPrice.addListener(_result);
+    _gramsController.addListener(_result);
+    _priceController.addListener(_result);
   }
 
   @override
   void dispose() {
-    goodsGrams.dispose();
-    goodsPrice.dispose();
+    _gramsController.dispose();
+    _priceController.dispose();
     super.dispose();
   }
 
-  Widget textField(TextEditingController controller, bool readOnly) {
+  Widget textField(TextEditingController _controller, bool _readOnly) {
     return TextField(
       keyboardType: TextInputType.number,
       textAlign: TextAlign.center,
       decoration: const InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 30),
-        fillColor: Colors.white,
-        filled: false,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.white, width: 2),
-        ),
-        // and add this line
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Colors.cyan, width: 2),
-        ),
-      ),
-      readOnly: readOnly,
-      controller: controller,
+          contentPadding: EdgeInsets.symmetric(vertical: 30),
+          fillColor: Colors.white,
+          filled: false,
+          border: InputBorder.none),
+      style: TextStyle(fontSize: 50),
+      readOnly: _readOnly,
+      controller: _controller,
       onTap: () {
-        if (controller.text.isNotEmpty &&
+        if (_controller.text.isNotEmpty &&
             _GramsToMoneyState.priceLockChecker == true &&
             _GramsToMoneyState.gramsLockChecker == false) {
-          goodsGrams.clear();
-          money.clear();
-        } else if (controller.text.isNotEmpty &&
+          _gramsController.clear();
+          _moneyController.clear();
+        } else if (_controller.text.isNotEmpty &&
             _GramsToMoneyState.gramsLockChecker == true &&
             _GramsToMoneyState.priceLockChecker == false) {
-          goodsPrice.clear();
-          money.clear();
-        } else if (controller.text.isNotEmpty &&
+          _priceController.clear();
+          _moneyController.clear();
+        } else if (_controller.text.isNotEmpty &&
             _GramsToMoneyState.moneyLockChecker == true) {
-          goodsPrice.clear();
-          goodsGrams.clear();
-        } else if (controller.text.isNotEmpty &&
+          _priceController.clear();
+          _gramsController.clear();
+        } else if (_controller.text.isNotEmpty &&
             _GramsToMoneyState.priceLockChecker == false &&
             _GramsToMoneyState.gramsLockChecker == false &&
             _GramsToMoneyState.moneyLockChecker == false) {
-          goodsPrice.clear();
-          goodsGrams.clear();
-          money.clear();
+          _priceController.clear();
+          _gramsController.clear();
+          _moneyController.clear();
         }
       },
     );
